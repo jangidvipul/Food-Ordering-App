@@ -1,10 +1,4 @@
-Ohh, ab samjha 🙂 tum chahte ho ki **poora README.md ek jagah ho** jise tum direct copy-paste karke `README.md` file bana sako.
 
-Yeh raha complete content 👇
-
----
-
-```markdown
 # 🍔 Food Ordering App
 
 A simple React + Vite based food ordering application.
