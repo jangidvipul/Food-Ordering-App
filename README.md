@@ -55,7 +55,3 @@ Food-Ordering-App/
    ```bash
    npm run dev
    ```
-
-
-Chaho to mai tumhare liye ek **ready `.md` file generate karke download link** bhi bana du?
-```
