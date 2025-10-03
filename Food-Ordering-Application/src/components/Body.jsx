@@ -28,7 +28,7 @@ const Body = () => {
 		// Also make a copy of original restaurant List in filteredRestaurant
 		// Defensive optional chaining (avoid crashes if path changes)
 		const restaurants =
-			json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
+			json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
 				?.restaurants || [];
 
 		const filteredRestaurant = [...restaurants];
