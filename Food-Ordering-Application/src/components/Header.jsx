@@ -32,6 +32,9 @@ const Header = () => {
 							Contact Us
 						</NavLink>
 					</li>
+					<li>Home</li>
+					<li>About Us</li>
+					<li>Contact Us</li>
 					<li>Cart</li>
 					<button
 						className="header-btn"

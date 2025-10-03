@@ -29,6 +29,7 @@ const Body = () => {
 		// Defensive optional chaining (avoid crashes if path changes)
 		const restaurants =
 			json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
+			json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
 				?.restaurants || [];
 
 		const filteredRestaurant = [...restaurants];
@@ -86,6 +87,7 @@ const Body = () => {
 					<Link to={"/restaurants/" + restaurant.info.id} key={restaurant.info.id}>
 						<RestaurantCard resData={restaurant.info} />
 					</Link>
+					<RestaurantCard key={restaurant.info.id} resData={restaurant.info} />
 				))}
 			</div>
 		</div>
