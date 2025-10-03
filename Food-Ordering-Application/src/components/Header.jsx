@@ -1,5 +1,6 @@
 import { LOGO_URL } from "../utils/constants";
 import { useState } from "react";
+import { NavLink } from "react-router";
 
 const Header = () => {
 	const [headerBtn, setheaderBtn] = useState("Login");
@@ -10,9 +11,27 @@ const Header = () => {
 			</div>
 			<div className="nav-links">
 				<ul>
-					<li>Home</li>
-					<li>About Us</li>
-					<li>Contact Us</li>
+					<li>
+						<NavLink
+							to="/"
+							className={({ isActive }) => isActive ? "active-link" : ""}>
+							Home
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							to="/about"
+							className={({ isActive }) => isActive ? "active-link" : ""}>
+							About Us
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							to="/contact"
+							className={({ isActive }) => isActive ? "active-link" : ""}>
+							Contact Us
+						</NavLink>
+					</li>
 					<li>Cart</li>
 					<button
 						className="header-btn"

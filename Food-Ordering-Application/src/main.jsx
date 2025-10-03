@@ -3,20 +3,21 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import AppLayout from "./App";
 import Body from "./components/Body";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
+import RestaurantMenu from "./components/RestaurantMenu";
 
 const appRouter = createBrowserRouter([
 	{
 		path: "/",
 		element: <AppLayout />,
 		children: [
-      {
-        path:"/",
-        element: <Body />
-      },
+			{
+				path: "/",
+				element: <Body />,
+			},
 			{
 				path: "/about",
 				element: <About />,
@@ -25,9 +26,13 @@ const appRouter = createBrowserRouter([
 				path: "/contact",
 				element: <Contact />,
 			},
+			{
+				path: "/restaurants/:resId",
+				element: <RestaurantMenu />,
+			},
 		],
 		errorElement: <Error />,
-	}
+	},
 ]);
 
 createRoot(document.getElementById("root")).render(

@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router";
+import Carousel from "./Carousel";
+import {slides} from "../data/carouselData.json"
 
 const Body = () => {
 	// As soon as "state var." changes -> 'React' will re-render the component
@@ -25,7 +28,7 @@ const Body = () => {
 		// Also make a copy of original restaurant List in filteredRestaurant
 		// Defensive optional chaining (avoid crashes if path changes)
 		const restaurants =
-			json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle
+			json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
 				?.restaurants || [];
 
 		const filteredRestaurant = [...restaurants];
@@ -39,6 +42,9 @@ const Body = () => {
 		<Shimmer />
 	) : (
 		<div className="body">
+		   <div className="carouselBox">
+				<Carousel data={slides}/>
+			</div>
 			<div className="search">
 				<div className="search-box">
 					<input
@@ -77,7 +83,9 @@ const Body = () => {
 			</div>
 			<div className="restContainer">
 				{filteredRestaurant.map((restaurant) => (
-					<RestaurantCard key={restaurant.info.id} resData={restaurant.info} />
+					<Link to={"/restaurants/" + restaurant.info.id} key={restaurant.info.id}>
+						<RestaurantCard resData={restaurant.info} />
+					</Link>
 				))}
 			</div>
 		</div>
