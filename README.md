@@ -45,4 +45,3 @@ A modern, responsive food ordering application built with React, designed to pro
    Open your browser and go to http://localhost:3000 to view the application.
    ```
 
-```
