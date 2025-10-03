@@ -29,7 +29,7 @@ A modern, responsive food ordering application built with React, designed to pro
 
 ```bash
    git clone https://github.com/jangidvipul/Food-Ordering-App.git
-   cd Food-Ordering-App
+   cd Food-Ordering-App\Food-Ordering-Application
 ````
 
 2. Install dependencies:
