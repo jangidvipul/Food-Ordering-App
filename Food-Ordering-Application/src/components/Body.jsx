@@ -1,61 +1,78 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router";
-import Carousel from "./Carousel";
-import {slides} from "../data/carouselData.json"
-
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+    
+// As soon as "state var." changes -> 'React' will re-render the component
+// 'React' is very efficient at "DOM manipulations" and due to this it is very fast JS. library as it quickly
+// find out the difference b/w 2 virtual DOM's using "Diffing" algo. & only update the necessary parts of Real DOM
 const Body = () => {
-	// As soon as "state var." changes -> 'React' will re-render the component
-	// 'React' is very efficient at "DOM manipulations" and due to this it is very fast JS. library as it quickly
-	// find out the difference b/w 2 virtual DOM's using "Diffing" algo. & only update the necessary parts of Real DOM
-
 	const [restaurantList, setRestaurantList] = useState([]); // here restaurantList is Local state var.(super powerful var. that store dynamic data) of Body comp.
-	const [filteredRestaurant, setFilteredRestaurant] = useState([]); // Created to use as a copy of original restaurantList and filter logic is only apply on 'filteredRestaurant' state var.
-	const [searchText, setSearchText] = useState(""); // here searchText is also a super Powerful state var. that store user I/P( dynamic data)
+	const [filteredRestaurant, setFilteredRestaurant] = useState([]); // It is used as a copy of original restaurantList and filter logic is only apply on 'filteredRestaurant' state var.
+	const [searchText, setSearchText] = useState(""); 
+	const onlineStatus = useOnlineStatus();
+	const {loggedInUser, setUserName} = useContext(UserContext);
 
 	useEffect(() => {
 		fetchData();
 	}, []);
 
-	const fetchData = async () => {
-		const data = await fetch(
-			"https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.9974&lng=79.0011&page_type=DESKTOP_WEB_LISTING"
+	// Fetch restaurant data API
+const fetchData = async () => {
+  try {
+    const res = await fetch(
+      "/api/dapi/restaurants/list/v5?lat=21.9974&lng=79.0011&page_type=DESKTOP_WEB_LISTING"
+    );
+
+    if (!res.ok) {
+      console.error("Network error:", res.status);
+      return;
+    }
+
+    const json = await res.json();
+
+    const restaurants =
+      json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants ||
+      json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants ||
+      [];
+
+    setRestaurantList(restaurants);
+    setFilteredRestaurant([...restaurants]);
+
+  } catch (err) {
+    console.error("Failed to load:", err);
+  }
+};
+
+	if (onlineStatus === false) {
+		return (
+			<h1 className="font-bold">
+				You are Offline🥺.., Please Check Your Internet connection!
+			</h1>
 		);
-		const json = await data.json();
-		
-		// update restaurant list only after Body component got rendered completely
-		// Also make a copy of original restaurant List in filteredRestaurant
-		// Defensive optional chaining (avoid crashes if path changes)
-		const restaurants =
-			json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
-				?.restaurants || [];
-
-		const filteredRestaurant = [...restaurants];
-
-		setRestaurantList(restaurants);
-		setFilteredRestaurant(filteredRestaurant);
-	};
+	}
 
 	// Conditional Rendering -
 	return restaurantList.length === 0 ? (
 		<Shimmer />
 	) : (
 		<div className="body">
-		   <div className="carouselBox">
-				<Carousel data={slides}/>
-			</div>
-			<div className="search">
-				<div className="search-box">
+			<div className="flex justify-between p-4 m-2 ">
+				<div>
 					<input
-						className="search-ip"
+						id="searchIP"
+						className="border  mr-2 p-1 rounded-sm"
 						type="text"
 						value={searchText}
 						onChange={(e) => {
 							setSearchText(e.target.value);
 						}}
 					/>
+					
 					<button
+						className="w-20 py-1 bg-gray-200 rounded-xl cursor-pointer font-medium transition duration-300 ease-in-out hover:bg-amber-400"
 						onClick={() => {
 							// filtered out searched Restaurant cards from original restaurantList without affecting its data, so next time if we again search for rest. cards
 							// we get filtered data from original restaurantList which has whole rest.
@@ -71,19 +88,33 @@ const Body = () => {
 					</button>
 				</div>
 				<button
-					className="filter-btn"
+					className="bg-gray-200 p-2 rounded-lg cursor-pointer font-medium transition duration-300 ease-in-out hover:text-amber-500"
 					onClick={() => {
 						let filteredList = restaurantList.filter(
-							(restaurant) => restaurant.info.avgRating > 4
+							(restaurant) => restaurant.info.avgRating > 4.2
 						);
 						setFilteredRestaurant(filteredList); // set updated value of restlist
 					}}>
-					Top Rated Restaurant
+					Top Rated Restaurant⭐
 				</button>
+				<div>
+					<input
+						id="searchIP"
+						className="border  mr-2 p-1 rounded-sm"
+						type="text"
+						value={loggedInUser}
+						onChange={(e) => {
+							setUserName(e.target.value);
+						}}
+					/>
+				</div>
 			</div>
-			<div className="restContainer">
+
+			<div className="flex flex-wrap">
 				{filteredRestaurant.map((restaurant) => (
-					<Link to={"/restaurants/" + restaurant.info.id} key={restaurant.info.id}>
+					<Link
+						to={"/restaurants/" + restaurant.info.id}
+						key={restaurant.info.id}>
 						<RestaurantCard resData={restaurant.info} />
 					</Link>
 				))}
