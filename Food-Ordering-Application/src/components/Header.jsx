@@ -3,11 +3,16 @@ import { useState, useContext } from "react";
 import { NavLink } from "react-router";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
+import appStore from "../utils/appStore";
 
 const Header = () => {
 	const [headerBtn, setheaderBtn] = useState("Login");
 	const onlineStatus = useOnlineStatus();
-	const {loggedInUser} = useContext(UserContext);
+	const { loggedInUser } = useContext(UserContext);
+	// Subscribing to our cart-items using "useSelector" hook-
+	const cartItems = useSelector((appStore) => appStore.cart.items);
+	console.log(cartItems);
 
 	return (
 		<div className="flex items-center justify-between p-2 m-2 border-b text-lg">
@@ -38,10 +43,16 @@ const Header = () => {
 							Contact Us
 						</NavLink>
 					</li>
-					<li className="transition duration-300 ease-in-out hover:text-amber-500 cursor-pointer">Cart</li>
-					<li className="bg-amber-400 px-3 py-2 rounded-lg ">
+					<li className="text-xl font-bold transition duration-300 ease-in-out hover:text-amber-500 cursor-pointer">
+						<NavLink
+							to="/cart"
+							className={({ isActive }) => (isActive ? "active-link" : "")}>
+							Cart-({cartItems.length} items)
+						</NavLink>
+					</li>
+					<li className="bg-amber-400 px-3 py-2 rounded-lg">
 						<button
-						   className="cursor-pointer"
+							className="cursor-pointer"
 							onClick={() => {
 								headerBtn === "Login"
 									? setheaderBtn("Logout")
