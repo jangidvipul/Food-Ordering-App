@@ -12,7 +12,7 @@ const AppLayout = () => {
 	useEffect(() => {
 		// Make an API call & it response back 'username' and 'password'
 		const data = {
-			username: "Vipul Jangid",
+			username: "",
 			password: "123abc",
 		};
 
